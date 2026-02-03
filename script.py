@@ -41,8 +41,16 @@ print(updated_damages_list)
 
 # 2 
 # Create a Table
-
+def create_dict():
+  dict = {}
+  for i in range(len(names)):
+    item = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Area Affected": areas_affected[i], "Damage": updated_damages_list[i], "Death": deaths[i]}
+    dict[names[i]] = item
+  return dict;
+  
 # Create and view the hurricanes dictionary
+hurricane_dictionary = create_dict()
+print(hurricane_dictionary)
 
 # 3
 # Organizing by Year
