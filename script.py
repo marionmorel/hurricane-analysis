@@ -44,7 +44,7 @@ print(updated_damages_list)
 def create_dict():
   dict = {}
   for i in range(len(names)):
-    item = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Area Affected": areas_affected[i], "Damage": updated_damages_list[i], "Death": deaths[i]}
+    item = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Areas Affected": areas_affected[i], "Damage": updated_damages_list[i], "Death": deaths[i]}
     dict[names[i]] = item
   return dict;
   
@@ -71,15 +71,35 @@ print(hurricanes_by_year)
 
 # 4
 # Counting Damaged Areas
+def count_values(dict):
+  value_count = {}
+  for i in dict:
+    for value in dict[i]["Areas Affected"]:
+      if value not in value_count:
+        value_count[value] = 1
+      else:
+        value_count[value] += 1
+  return value_count
 
-# create dictionary of areas to store the number of hurricanes involved in
-
+# create dictionary of areas to store the number of hurricanes involved in each area
+area_count = count_values(hurricane_dictionary)
+print(area_count)
 
 # 5 
 # Calculating Maximum Hurricane Count
+def most_hit_area(area_count):
+  max_area = ""
+  max_area_count = 0
+  for area in area_count:
+    if area_count[area] > max_area_count:
+      max_area = area
+      max_area_count = area_count[area]
+    else:
+      continue
+  print("Most affected area: " + max_area + ", hit by " + str(max_area_count) + " hurricanes")
 
 # find most frequently affected area and the number of hurricanes involved in
-
+most_hit_area(area_count)
 
 # 6
 # Calculating the Deadliest Hurricane
