@@ -24,8 +24,19 @@ deaths = [90,4000,16,3103,179,184,408,682,5,1023,43,319,688,259,37,11,2068,269,3
 conversion = {"M": 1000000,
               "B": 1000000000}
 
-# test function by updating damages
+def update_damages(list):
+  updated_list = []
+  for item in list:
+    if "B" in item:
+      updated_list.append(float(item[:-1]) * conversion["B"])
+    elif "M" in item:
+      updated_list.append(float(item[:-1]) * conversion["M"])
+    else:
+      updated_list.append(item)
+  return updated_list
 
+# test function by updating damages
+print(update_damages(damages))
 
 # 2 
 # Create a Table
