@@ -54,9 +54,20 @@ print(hurricane_dictionary)
 
 # 3
 # Organizing by Year
+def group_by_year(dict):
+  grouped_dict = {}
+  for item in dict:
+    year = dict[item]["Year"]
+    item_data = dict[item]
+    if year not in grouped_dict:
+      grouped_dict[year] = [item_data]
+    else:
+      grouped_dict[year].append(item_data)
+  return grouped_dict
 
 # create a new dictionary of hurricanes with year and key
-
+hurricanes_by_year = group_by_year(hurricane_dictionary)
+print(hurricanes_by_year)
 
 # 4
 # Counting Damaged Areas
