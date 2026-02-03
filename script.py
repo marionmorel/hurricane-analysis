@@ -21,19 +21,18 @@ deaths = [90,4000,16,3103,179,184,408,682,5,1023,43,319,688,259,37,11,2068,269,3
 
 # 1
 # Update Recorded Damages
-conversion = {"M": 1000000,
-              "B": 1000000000}
-
-def update_damages(list):
-  updated_list = []
-  for item in list:
-    if "B" in item:
-      updated_list.append(float(item[:-1]) * conversion["B"])
-    elif "M" in item:
-      updated_list.append(float(item[:-1]) * conversion["M"])
+def update_damages(damages):
+  conversion = {"M": 1000000,
+                "B": 1000000000}
+  updated_damages = []
+  for damage in damages:
+    if "B" in damage:
+      updated_damages.append(float(damage[:-1]) * conversion["B"])
+    elif "M" in damage:
+      updated_damages.append(float(damage[:-1]) * conversion["M"])
     else:
-      updated_list.append(item)
-  return updated_list
+      updated_damages.append(damage)
+  return updated_damages
 
 # test function by updating damages
 updated_damages_list = update_damages(damages)
@@ -41,28 +40,28 @@ print(updated_damages_list)
 
 # 2 
 # Create a Table
-def create_dict():
-  dict = {}
+def create_hurr_dict():
+  hurricanes = {}
   for i in range(len(names)):
-    item = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Areas Affected": areas_affected[i], "Damage": updated_damages_list[i], "Deaths": deaths[i]}
-    dict[names[i]] = item
-  return dict;
+    hurricane = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Areas Affected": areas_affected[i], "Damage": updated_damages_list[i], "Deaths": deaths[i]}
+    hurricanes[names[i]] = hurricane
+  return hurricanes;
   
 # Create and view the hurricanes dictionary
-hurricane_dictionary = create_dict()
+hurricane_dictionary = create_hurr_dict()
 print(hurricane_dictionary)
 
 # 3
 # Organizing by Year
-def group_by_year(dict):
+def group_by_year(hurricanes):
   grouped_dict = {}
-  for item in dict:
-    year = dict[item]["Year"]
-    item_data = dict[item]
+  for hurr in hurricanes:
+    year = hurricanes[hurr]["Year"]
+    hurr_data = hurricanes[hurr]
     if year not in grouped_dict:
-      grouped_dict[year] = [item_data]
+      grouped_dict[year] = [hurr_data]
     else:
-      grouped_dict[year].append(item_data)
+      grouped_dict[year].append(hurr_data)
   return grouped_dict
 
 # create a new dictionary of hurricanes with year and key
@@ -71,18 +70,18 @@ print(hurricanes_by_year)
 
 # 4
 # Counting Damaged Areas
-def count_values(dict):
-  value_count = {}
-  for i in dict:
-    for value in dict[i]["Areas Affected"]:
-      if value not in value_count:
-        value_count[value] = 1
+def count_areas(hurricanes):
+  area_count = {}
+  for hurr in hurricanes:
+    for area in hurricanes[hurr]["Areas Affected"]:
+      if area not in area_count:
+        area_count[area] = 1
       else:
-        value_count[value] += 1
-  return value_count
+        area_count[area] += 1
+  return area_count
 
 # create dictionary of areas to store the number of hurricanes involved in each area
-area_count = count_values(hurricane_dictionary)
+area_count = count_areas(hurricane_dictionary)
 print(area_count)
 
 # 5 
@@ -103,13 +102,13 @@ most_hit_area(area_count)
 
 # 6
 # Calculating the Deadliest Hurricane
-def deathliest(dict):
+def deathliest(hurricanes):
   max_deaths = 0
   deathliest_hurricane = ""
-  for hurricane in dict:
-    if dict[hurricane]["Deaths"] > max_deaths:
-      deathliest_hurricane = hurricane
-      max_deaths = dict[hurricane]["Deaths"]
+  for hurr in hurricanes:
+    if hurricanes[hurr]["Deaths"] > max_deaths:
+      deathliest_hurricane = hurr
+      max_deaths = hurricanes[hurr]["Deaths"]
     else:
       continue
   print("Deadliest hurricane: " + deathliest_hurricane + ", " + str(max_deaths) + " deaths")
@@ -119,7 +118,7 @@ deathliest(hurricane_dictionary)
 
 # 7
 # Rating Hurricanes by Mortality
-def mortality_rate(dict):
+def mortality_rate(hurricanes):
   mortality_scale = {0: 0,
                    1: 100,
                    2: 500,
@@ -127,9 +126,9 @@ def mortality_rate(dict):
                    4: 10000,
                    5: 100000}
   grouped_by_mortality = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
-  for hurricane in dict:
-    death_toll = dict[hurricane]["Deaths"]
-    data = dict[hurricane]
+  for hurr in hurricanes:
+    death_toll = hurricanes[hurr]["Deaths"]
+    data = hurricanes[hurr]
     for i in mortality_scale:
       if death_toll > mortality_scale[i]:
         continue
@@ -143,16 +142,50 @@ hurricanes_mortality_scale = mortality_rate(hurricane_dictionary)
 print(hurricanes_mortality_scale)
 
 # 8 Calculating Hurricane Maximum Damage
+def costliest(hurricanes):
+  max_cost = 0
+  costliest_hurricane = ""
+  for hurr in hurricanes:
+    if hurricanes[hurr]["Damage"] == "Damages not recorded":
+      hurricanes[hurr]["Damage"] = 0
+    elif hurricanes[hurr]["Damage"] > max_cost:
+      costliest_hurricane = hurr
+      max_cost = hurricanes[hurr]["Damage"]
+    else:
+      continue
+  print("Costliest hurricane: " + costliest_hurricane + ", $" + str(max_cost) + " in damages")
 
 # find highest damage inducing hurricane and its total cost
-
+costliest(hurricane_dictionary)
 
 # 9
 # Rating Hurricanes by Damage
-damage_scale = {0: 0,
+def damage_severity(hurricanes):
+  damage_scale = {0: 0,
                 1: 100000000,
                 2: 1000000000,
                 3: 10000000000,
                 4: 50000000000}
+  grouped_by_severity = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
+  for hurr in hurricanes:
+    damage = hurricanes[hurr]["Damage"]
+    data = hurricanes[hurr]
+    if damage == "Damages not recorded":
+      grouped_by_severity[0].append(data)
+    elif damage == damage_scale[0]:
+      grouped_by_severity[0].append(data)
+    elif damage > damage_scale[0] and damage <= damage_scale[1]:
+      grouped_by_severity[1].append(data)
+    elif damage > damage_scale[1] and damage <= damage_scale[2]:
+      grouped_by_severity[2].append(data)
+    elif damage > damage_scale[2] and damage <= damage_scale[3]:
+      grouped_by_severity[3].append(data)
+    elif damage > damage_scale[3] and damage <= damage_scale[4]:
+      grouped_by_severity[4].append(data)
+    elif damage > damage_scale[4]:
+      grouped_by_severity[5].append(data)
+  return grouped_by_severity
   
 # categorize hurricanes in new dictionary with damage severity as key
+hurricanes_severity_scale = damage_severity(hurricane_dictionary)
+print(hurricanes_severity_scale)
