@@ -44,7 +44,7 @@ print(updated_damages_list)
 def create_dict():
   dict = {}
   for i in range(len(names)):
-    item = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Areas Affected": areas_affected[i], "Damage": updated_damages_list[i], "Death": deaths[i]}
+    item = {"Name": names[i], "Month": months[i], "Year": years[i], "Max Sustained Wind": max_sustained_winds[i], "Areas Affected": areas_affected[i], "Damage": updated_damages_list[i], "Deaths": deaths[i]}
     dict[names[i]] = item
   return dict;
   
@@ -103,15 +103,44 @@ most_hit_area(area_count)
 
 # 6
 # Calculating the Deadliest Hurricane
+def deathliest(dict):
+  max_deaths = 0
+  deathliest_hurricane = ""
+  for hurricane in dict:
+    if dict[hurricane]["Deaths"] > max_deaths:
+      deathliest_hurricane = hurricane
+      max_deaths = dict[hurricane]["Deaths"]
+    else:
+      continue
+  print("Deadliest hurricane: " + deathliest_hurricane + ", " + str(max_deaths) + " deaths")
 
 # find highest mortality hurricane and the number of deaths
+deathliest(hurricane_dictionary)
 
 # 7
 # Rating Hurricanes by Mortality
-
+def mortality_rate(dict):
+  mortality_scale = {0: 0,
+                   1: 100,
+                   2: 500,
+                   3: 1000,
+                   4: 10000,
+                   5: 100000}
+  grouped_by_mortality = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
+  for hurricane in dict:
+    death_toll = dict[hurricane]["Deaths"]
+    data = dict[hurricane]
+    for i in mortality_scale:
+      if death_toll > mortality_scale[i]:
+        continue
+      else:
+        grouped_by_mortality[i].append(data)
+        break
+  return grouped_by_mortality
 
 # categorize hurricanes in new dictionary with mortality severity as key
-
+hurricanes_mortality_scale = mortality_rate(hurricane_dictionary)
+print(hurricanes_mortality_scale)
 
 # 8 Calculating Hurricane Maximum Damage
 
