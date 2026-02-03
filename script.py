@@ -36,7 +36,8 @@ def update_damages(list):
   return updated_list
 
 # test function by updating damages
-print(update_damages(damages))
+updated_damages_list = update_damages(damages)
+print(updated_damages_list)
 
 # 2 
 # Create a Table
